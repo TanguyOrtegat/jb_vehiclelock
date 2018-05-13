@@ -11,10 +11,10 @@ local Keys = {
 }
 --================ begin variables
 local VehicleList = {}
-local Config = {}
+Config = {}
 --================ end variables
 --================ begin config
-local Config.disableNPC = true
+Config.disableNPC = true
 --================ end config
 
 Citizen.CreateThread(function()
