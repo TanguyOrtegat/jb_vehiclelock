@@ -25,22 +25,23 @@ function lock()
 	local vehicleplate = GetVehicleNumberPlateText(vehicle)
 	local lastvehicle= GetVehiclePedIsIn (player, true)
 	local islocked = GetVehicleDoorLockStatus(vehicle)
+	
+	
 	local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(-1),true))
 	local distanceToVeh = GetDistanceBetweenCoords(GetEntityCoords(player), GetEntityCoords(vehicle), 1)
 	local clostestvehicle = GetClosestVehicle(x, y, z, 7.000, 0, 127)
 	local clostestvehicleplate = GetVehicleNumberPlateText(clostestvehicle)
 	local islockedclostestvehicle = GetVehicleDoorLockStatus(clostestvehicle)
-	print('clostestplate')
-	print(clostestvehicleplate)
 	local isvehiclefound = false
 
+	
 	local pos = GetEntityCoords(player)
     local entityWorld = GetOffsetFromEntityInWorldCoords(player, 0.0, 20.0, 0.0)
     local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 7, player, 0)
     local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
 	local vehicleHandleplate = GetVehicleNumberPlateText(vehicleHandle)
 	local islockedHandle = GetVehicleDoorLockStatus(vehicleHandle)
-	-- print (x, y, z)
+	
 	local foundclostestvehicle = false
 	
 	
@@ -51,10 +52,8 @@ function lock()
 					for k,v in pairs(VehicleList) do
 						if v.plate == vehicleplate then
 							isvehiclefound = true
-							print('isvehiclefound 1 is true')
 							break
 						end
-						print('isvehiclefound 1 is false')
 					end
 					if isvehiclefound then
 						if (islocked == 1)then
@@ -75,25 +74,19 @@ function lock()
 						end
 					end
 				else
-					print("empty table")
 					SetVehicleDoorsLocked(vehicle, 2)
 					Notify("Le véhicule ~y~" .. GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))) .. "~w~ est ~r~vérouiller ~w~.")
-					table.insert(VehicleList, {plate = vehicleplate})
 				end
 			else
 				Notify("~r~Pas de véhicule à vérouiller. 3")
 			end
-			print(dump(VehicleList))
 		else
-			print('test')
-			print(vehicleHandleplate)
 			if not table.empty(VehicleList) then
 				if vehicleHandleplate ~= nil or clostestvehicleplate ~= nil then
 					for k,v in pairs(VehicleList) do
 						if v.plate == clostestvehicleplate then
 							isvehiclefound = true
 							foundclostestvehicle = true
-							print('isvehiclefound 2 is true')
 							break
 						end
 					end
@@ -101,7 +94,6 @@ function lock()
 						for k,v in pairs(VehicleList) do
 							if v.plate == vehicleHandleplate then
 								isvehiclefound = true
-								print('isvehiclefound 2 is true')
 								break
 							end
 						end
@@ -136,7 +128,6 @@ function lock()
 			else
 				Notify("~r~Pas de véhicule à vérouiller, ou le véhicule est vérouiller.")
 			end
-			print(dump(VehicleList))
 		end
 	else
 		if DoesEntityExist(vehicleHandle) then
@@ -158,10 +149,7 @@ function lock()
 				else
 					Notify("Le véhicule que vous voulez ouvrir, est ~r~vérouiller~w~.")
 				end
-			else
-				print("this is not a vehicle")
 			end
-		print("not an entity")
 		end
 	end
 end
