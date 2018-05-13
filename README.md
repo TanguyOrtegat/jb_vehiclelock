@@ -4,6 +4,5 @@ This is a ready to use vehicle lock for all cars. Press key "K" to open or close
 If you have questions feel free to ask me. 
 it is strictly forbidden to reporduce jb_vehiclelock. If you wish to add modifications, contact me on discord.
 
-If you find my scripts good and you wish to donnate me for my work. feel free to contact me :)
 
 discord: Jager Bom [dev]#2795
