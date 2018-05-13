@@ -9,8 +9,13 @@ local Keys = {
   ["LEFT"] = 174, ["RIGHT"] = 175, ["TOP"] = 27, ["DOWN"] = 173,
   ["NENTER"] = 201, ["N4"] = 108, ["N5"] = 60, ["N6"] = 107, ["N+"] = 96, ["N-"] = 97, ["N7"] = 117, ["N8"] = 61, ["N9"] = 118
 }
-local VehicleList = { }
-
+--================ begin variables
+local VehicleList = {}
+local Config = {}
+--================ end variables
+--================ begin config
+local Config.disableNPC = true
+--================ end config
 
 Citizen.CreateThread(function()
     Citizen.Wait(0)
@@ -152,6 +157,32 @@ function lock()
 			end
 		end
 	end
+end
+
+---------- disable pnj Carjacking
+if Config.disableNPC then
+Citizen.CreateThread(function()
+    while true do
+        Wait(700)
+
+        local player = GetPlayerPed(-1)
+
+        if DoesEntityExist(GetVehiclePedIsTryingToEnter(PlayerPedId(player))) then
+            local veh = GetVehiclePedIsTryingToEnter(PlayerPedId(player))
+            local lock = GetVehicleDoorLockStatus(veh)
+
+            if lock == 7 then
+                SetVehicleDoorsLocked(veh, 2)
+            end
+
+            local pedd = GetPedInVehicleSeat(veh, -1)
+
+            if pedd then
+                SetPedCanBeDraggedOut(pedd, false)
+            end
+        end
+    end
+end)
 end
 
 function table.empty (self)
