@@ -18,9 +18,12 @@ Config.disableNPC = true
 --================ end config
 
 Citizen.CreateThread(function()
-    Citizen.Wait(0)
-	if IsControlJustReleased(0, Keys['K']) then
-		lock()
+	while true do
+		Citizen.Wait(1)
+		if IsControlJustReleased(0, Keys['K']) then
+			lock()
+			Citizen.Wait(1000)
+		end
 	end
 end)
 
@@ -64,23 +67,29 @@ function lock()
 						if (islocked == 1)then
 							SetVehicleDoorsLocked(vehicle, 2)
 							Notify("Le véhicule ~y~" .. GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))) .. "~w~ est ~r~vérouiller ~w~.")
+							-- TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "lock", 1.0)
 						else
 							SetVehicleDoorsLocked(vehicle,1)
 							Notify("Le véhicule ~y~" .. GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))) .. "~w~ est ~g~dévérouiller ~w~.")
+							-- TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "unlock", 1.0)
 						end
 					else
 						if (islocked == 1)then
 							SetVehicleDoorsLocked(vehicle, 2)
 							Notify("Le véhicule ~y~" .. GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))) .. "~w~ est ~r~vérouiller ~w~.")
+							-- TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "lock", 1.0)
 							table.insert(VehicleList, {plate = vehicleplate})
 						else
 							SetVehicleDoorsLocked(vehicle,1)
 							Notify("Le véhicule ~y~" .. GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))) .. "~w~ est ~g~dévérouiller ~w~.")
+							-- TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "unlock", 1.0)
 						end
 					end
 				else
 					SetVehicleDoorsLocked(vehicle, 2)
 					Notify("Le véhicule ~y~" .. GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))) .. "~w~ est ~r~vérouiller ~w~.")
+					-- TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "lock", 1.0)
+					table.insert(VehicleList, {plate = vehicleplate})
 				end
 			else
 				Notify("~r~Pas de véhicule à vérouiller. 3")
@@ -108,24 +117,28 @@ function lock()
 							if (islockedHandle == 1)then
 								SetVehicleDoorsLocked(vehicleHandle, 2)
 								Notify("Le véhicule ~y~" .. GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicleHandle))) .. "~w~ est ~r~vérouiller ~w~.")
+								-- TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "lock", 1.0)
 							else
 								SetVehicleDoorsLocked(vehicleHandle,1)
 								Notify("Le véhicule ~y~" .. GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicleHandle))) .. "~w~ est ~g~dévérouiller ~w~.")
+								-- TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "unlock", 1.0)
 							end
 						else
 							if (islockedclostestvehicle == 1)then
 								SetVehicleDoorsLocked(clostestvehicle, 2)
 								Notify("Le véhicule ~y~" .. GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(clostestvehicle))) .. "~w~ est ~r~vérouiller ~w~.")
+								-- TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "lock", 1.0)
 								foundclostestvehicle = false
 							else
 								SetVehicleDoorsLocked(clostestvehicle,1)
 								Notify("Le véhicule ~y~" .. GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(clostestvehicle))) .. "~w~ est ~g~dévérouiller ~w~.")
+								-- TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "unlock", 1.0)
 								foundclostestvehicle = false
 							end
 
 						end
 					else
-						Notify("Le véhicule que vous voulez ouvrir, est ~r~vérouiller~w~.")
+						Notify("Le véhicule que vous voulez ouvrir, n'est ~r~ pas a vous~w~.")
 					end
 				else
 					Notify("~r~Pas de véhicule à vérouiller. 2")
@@ -147,9 +160,11 @@ function lock()
 					if (islockedHandle == 1)then
 						SetVehicleDoorsLocked(vehicleHandle, 2)
 						Notify("Le véhicule ~y~" .. GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicleHandle))) .. "~w~ est ~r~vérouiller ~w~.")
+						-- TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "lock", 1.0)
 					else
 						SetVehicleDoorsLocked(vehicleHandle,1)
 						Notify("Le véhicule ~y~" .. GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicleHandle))) .. "~w~ est ~g~dévérouiller ~w~.")
+						-- TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "unlock", 1.0)
 					end
 				else
 					Notify("Le véhicule que vous voulez ouvrir, est ~r~vérouiller~w~.")
@@ -161,28 +176,28 @@ end
 
 ---------- disable pnj Carjacking
 if Config.disableNPC then
-Citizen.CreateThread(function()
-    while true do
-        Wait(700)
+	Citizen.CreateThread(function()
+		while true do
+			Wait(700)
 
-        local player = GetPlayerPed(-1)
+			local player = GetPlayerPed(-1)
 
-        if DoesEntityExist(GetVehiclePedIsTryingToEnter(PlayerPedId(player))) then
-            local veh = GetVehiclePedIsTryingToEnter(PlayerPedId(player))
-            local lock = GetVehicleDoorLockStatus(veh)
+			if DoesEntityExist(GetVehiclePedIsTryingToEnter(PlayerPedId(player))) then
+				local veh = GetVehiclePedIsTryingToEnter(PlayerPedId(player))
+				local lock = GetVehicleDoorLockStatus(veh)
 
-            if lock == 7 then
-                SetVehicleDoorsLocked(veh, 2)
-            end
+				if lock == 7 then
+					SetVehicleDoorsLocked(veh, 2)
+				end
 
-            local pedd = GetPedInVehicleSeat(veh, -1)
+				local pedd = GetPedInVehicleSeat(veh, -1)
 
-            if pedd then
-                SetPedCanBeDraggedOut(pedd, false)
-            end
-        end
-    end
-end)
+				if pedd then
+					SetPedCanBeDraggedOut(pedd, false)
+				end
+			end
+		end
+	end)
 end
 
 function table.empty (self)
